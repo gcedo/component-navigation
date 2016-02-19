@@ -1,0 +1,132 @@
+@import "settings";
+@import "@economist/component-google-search";
+
+:root {
+  --navigation__search-default-width: 100px;
+  --navigation__search-default-width-mobile: 50px;
+  --search__search-label__font-size: var(--navigation-text-size);
+}
+
+.navigation__search {
+  flex: 0 1 auto;
+  padding: 0 32px 0 var(--navigation__default-menus-padding, var(--main-navigation-link-padding));
+}
+
+.navigation__search--open,
+.navigation__search--closed {
+  border-collapse: collapse;
+  color: var(--search__color, var(--color-thimphu));
+  display: table;
+  font-size: 1em;
+  height: var(--navigation__height, var(--navigation__default-height));
+  left: auto;
+  right: 10px;
+}
+
+.navigation__search .error--message {
+  color: var(--color-economist);
+}
+
+.navigation__search-magnifier {
+  border-top: 1px solid var(--search__border-top-color, var(--color-berlin));
+  min-width: 50px;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.navigation__collapsed-magnifier {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 64px;
+  min-width: 50px;
+}
+
+.navigation__collapsed-magnifier use,
+.navigation__collapsed-magnifier svg {
+  fill: var(--color-thimphu);
+}
+
+.navigation__search--open {
+  background: var(--search--open__background, var(--color-thimphu));
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.navigation__show-field-group {
+  display: table-row;
+}
+
+.navigation__search-open-button.icon--magnifier-thimphu {
+  background-position: left center;
+  background-size: 24px 24px;
+  color: var(--search__color, var(--color-thimphu));
+  display: table-cell;
+  font-size: var(--search__search-label__font-size, var(--text-size-step--1));
+  height: var(--search__search-label__height, var(--text-size-step--1));
+  min-width: 50px;
+  padding-left: 28px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.navigation__search-close-button-wrapper {
+  background-color: var(--search-close__background, var(--color-kiev));
+  height: var(--search__close-button-height, 64px);
+  width: var(--search__close-button-height, 64px);
+  display: flex;
+  min-width: 50px;
+  box-sizing: border-box;
+}
+
+.navigation__search-close-button.icon--close-thimphu {
+  width: 100%;
+  height: 100%;
+  background-size: 24px 24px;
+  background-position: center center;
+}
+
+@media (--navigation-mobile-down){
+  .navigation__search--open .navigation__search-open-button {
+    height: var(--navigation__height, var(--navigation__default-height));
+    width: var(--navigation__height, var(--navigation__default-height));
+  }
+}
+
+@media (--navigation-tablet-down) {
+  .navigation__search  {
+    padding: 0;
+  }
+  .navigation__search-open-button {
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .navigation__collapsed-magnifier {
+    display: table-cell;
+  }
+
+  .navigation__show-field-group .navigation__search-open-button {
+    display: none;
+  }
+}
+
+@media (--navigation-tablet-up) {
+  .navigation__collapsed-magnifier {
+    display: none;
+  }
+
+  .navigation__show-field-group .navigation__search-open-button {
+    display: table-cell;
+  }
+}
+
+/* Bring Google Search on front */
+.gssb_c {
+    z-index: 10000000;
+}
