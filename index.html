@@ -213,12 +213,16 @@ pre[class*&#x3D;&quot;language-&quot;] {
     <p>A navigation masthead</p>
     </blockquote>
     <h2>Usage</h2>
-    <p>Simply import the component for use in your project:</p>
+    <p><strong>This component expects an ES6 environment</strong>, and so if you are using this in an app,
+    you should drop in a polyfill library - it has been tested with <a href="https://babeljs.io/docs/usage/polyfill/">babel-polyfill</a> but
+    <a href="https://www.npmjs.com/package/core-js">core-js</a> or <a href="https://www.npmjs.com/package/es6-shim">es6-shim</a> may also work.</p>
+    <p>The default export is a React Component, so you can simply import the component and use
+    it within some JSX, like so:</p>
     <pre><code class="lang-js">import Navigation from '@economist/component-navigation';
     
     return &lt;Navigation/&gt;;
     </code></pre>
-    <p>For more examples on usage, see [<code>src/example.es6</code>]](./src/example.es6).</p>
+    <p>For more examples on usage, see <a href="./src/example.es6"><code>src/example.es6</code></a>.</p>
     <h2>Install</h2>
     <pre><code class="lang-bash">npm i -S @economist/component-navigation
     </code></pre>
@@ -230,7 +234,8 @@ pre[class*&#x3D;&quot;language-&quot;] {
     </div>
     <div class="component-panel">
       <h2 id="example" class="component-panel-heading"><a href="#example">Example</a></h2>
-      <pre><code>    <span class="token keyword" >import</span> Navigation <span class="token keyword" >from</span> <span class="token string" >'./'</span><span class="token punctuation" >;</span>
+      <pre><code>    <span class="token keyword" >import</span> <span class="token string" >'babel-polyfill'</span><span class="token punctuation" >;</span>
+    <span class="token keyword" >import</span> Navigation <span class="token keyword" >from</span> <span class="token string" >'./'</span><span class="token punctuation" >;</span>
     <span class="token keyword" >import</span> React <span class="token keyword" >from</span> <span class="token string" >'react'</span><span class="token punctuation" >;</span>
     <span class="token keyword" >import</span> navigationLinks <span class="token keyword" >from</span> <span class="token string" >'@economist/component-sections-card/lib/context'</span><span class="token punctuation" >;</span>
     <span class="token keyword" >import</span> svgForEverybody <span class="token keyword" >from</span> <span class="token string" >'svg4everybody'</span><span class="token punctuation" >;</span>
@@ -422,7 +427,6 @@ pre[class*&#x3D;&quot;language-&quot;] {
         <span class="token operator" >&lt;</span>div<span class="token operator" >></span>
             <span class="token operator" >&lt;</span>Navigation className<span class="token operator" >=</span><span class="token string" >"navigation navigation--registered navigation--sticked"</span>
               svgUri<span class="token operator" >=</span><span class="token string" >"assets/icons.svg"</span>
-              autohide<span class="token operator" >=</span><span class="token punctuation" >{</span><span class="token boolean" >false</span><span class="token punctuation" >}</span>
               sectionsCardData<span class="token operator" >=</span><span class="token punctuation" >{</span>navigationLinks<span class="token punctuation" >}</span>
               moreBalloonData<span class="token operator" >=</span><span class="token punctuation" >{</span>moreBalloonData<span class="token punctuation" >}</span>
               accordionData<span class="token operator" >=</span><span class="token punctuation" >{</span>accordionContext<span class="token punctuation" >}</span>
@@ -436,7 +440,6 @@ pre[class*&#x3D;&quot;language-&quot;] {
           <span class="token operator" >&lt;</span>Navigation className<span class="token operator" >=</span><span class="token string" >"navigation navigation--registered navigation--sticked"</span>
             svgUri<span class="token operator" >=</span><span class="token string" >"assets/icons.svg"</span>
             userLoggedIn
-            autohide<span class="token operator" >=</span><span class="token punctuation" >{</span><span class="token boolean" >false</span><span class="token punctuation" >}</span>
             sectionsCardData<span class="token operator" >=</span><span class="token punctuation" >{</span>navigationLinks<span class="token punctuation" >}</span>
             accordionData<span class="token operator" >=</span><span class="token punctuation" >{</span>accordionContext<span class="token punctuation" >}</span>
             moreBalloonData<span class="token operator" >=</span><span class="token punctuation" >{</span>moreBalloonData<span class="token punctuation" >}</span>
@@ -451,7 +454,6 @@ pre[class*&#x3D;&quot;language-&quot;] {
             svgUri<span class="token operator" >=</span><span class="token string" >"assets/icons.svg"</span>
             userLoggedIn
             userIsSubscriber
-            autohide<span class="token operator" >=</span><span class="token punctuation" >{</span><span class="token boolean" >false</span><span class="token punctuation" >}</span>
             sectionsCardData<span class="token operator" >=</span><span class="token punctuation" >{</span>navigationLinks<span class="token punctuation" >}</span>
             accordionData<span class="token operator" >=</span><span class="token punctuation" >{</span>accordionContext<span class="token punctuation" >}</span>
             moreBalloonData<span class="token operator" >=</span><span class="token punctuation" >{</span>moreBalloonData<span class="token punctuation" >}</span>
