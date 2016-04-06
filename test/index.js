@@ -77,16 +77,26 @@ describe('Navigation', () => {
       navigation.should.have.className('navigation');
     });
 
-    it('renders link to /user/login?destination={this.props.currentUrl}', () => {
+    it('renders link to /user/login?destination={this.props.currentUrl} when `userLoggedIn` is not set', () => {
       rendered = mount(<Navigation {...props} className="navigation" currentUrl="/foo/bar" />);
       rendered.find('.navigation__user-menu-log-in-button')
         .should.have.attr('href', '/user/login?destination=%2Ffoo%2Fbar');
     });
 
-    it('renders link to /logout?destination={this.props.currentUrl} when user is logged in', () => {
+    it('renders link to /logout?destination={this.props.currentUrl} when `userLoggedIn` is set', () => {
       rendered = mount(<Navigation {...props} userLoggedIn currentUrl="/foo/bar" />);
       rendered.find('.navigation__user-menu-linklist-link--cta')
         .should.have.attr('href', '/logout?destination=%2Ffoo%2Fbar');
+    });
+
+    it('renders subscribe button when `userIsSubscriber` is not set', () => {
+      rendered = mount(<Navigation {...props} />);
+      rendered.find('.navigation__main-navigation-link-subscribe').should.be.present();
+    });
+
+    it('does not render subscribe button when `userIsSubscriber` is set', () => {
+      rendered = mount(<Navigation {...props} userIsSubscriber />);
+      rendered.find('.navigation__main-navigation-link-subscribe').should.not.be.present();
     });
 
   });

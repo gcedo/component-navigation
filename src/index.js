@@ -278,18 +278,22 @@ export default class Navigation extends React.Component {
             title={this.props.sharedMenu.more.title}
           />
           <div className="navigation__primary-expander" />
-          <Button href={this.props.sharedMenu.subscribe.href}
-            className="navigation__main-navigation-link navigation__main-navigation-link-subscribe
-            navigation__main-navigation--desktop"
-            target="_blank"
-            i13nModel={{
-              action: 'click',
-              element: 'subscribe',
-            }}
-            unstyled
-          >
-            {this.props.sharedMenu.subscribe.title}
-          </Button>
+          {
+            userIsSubscriber ? null : (
+              <Button href={this.props.sharedMenu.subscribe.href}
+                className="navigation__main-navigation-link navigation__main-navigation-link-subscribe
+                navigation__main-navigation--desktop"
+                target="_blank"
+                i13nModel={{
+                  action: 'click',
+                  element: 'subscribe',
+                }}
+                unstyled
+              >
+                {this.props.sharedMenu.subscribe.title}
+              </Button>
+            )
+          }
           <div className="navigation__user-menu">
             {this.renderLoginLogout()}
           </div>
