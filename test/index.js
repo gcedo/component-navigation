@@ -99,6 +99,25 @@ describe('Navigation', () => {
       rendered.find('.navigation__main-navigation-link-subscribe').should.not.be.present();
     });
 
+    it('renders links in mobile menu with `hideWhenSubscribed: true` when `userIsSubscriber` not set', () => {
+      rendered = mount(<Navigation {...props} />);
+      const mobileMenu = rendered.find('.navigation__primary-inner').find('.accordion');
+      mobileMenu.should.have.exactly(5).descendants('.list__item');
+      mobileMenu.childAt(4).find('.link-button')
+        .should.have.text('Subscribe');
+    });
+
+    it('does not render links in mobile menu with `hideWhenSubscribed: true` when `userIsSubscriber` is set', () => {
+      props.accordionData[4].hideWhenSubscribed = true;
+      rendered = mount(<Navigation {...props} userIsSubscriber />);
+      const mobileMenu = rendered.find('.navigation__primary-inner').find('.accordion');
+      mobileMenu.should.have.exactly(4).descendants('.list__item');
+      mobileMenu.childAt(0).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(1).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(2).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(3).find('.link-button').should.not.have.text('Subscribe');
+    });
+
   });
 
 });

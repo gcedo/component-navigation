@@ -242,7 +242,14 @@ export default class Navigation extends React.Component {
 
   render() {
     const { searching } = this.state;
+    const { userIsSubscriber } = this.props;
+    let { accordionData } = this.props;
     const svgUri = { uri: this.props.svgUri } || {};
+    if (userIsSubscriber) {
+      accordionData = accordionData.filter((accordionLink) => (
+        accordionLink.hideWhenSubscribed !== true
+      ));
+    }
 
     const menuAccordionTrigger = (
       <a href="/Sections" className="navigation__sections-link navigation--tappable-icon">
@@ -260,7 +267,7 @@ export default class Navigation extends React.Component {
             className="navigation__main-navigation-link navigation__mobile-accordion"
             trigger={menuAccordionTrigger}
           >
-            <Accordion list={this.props.accordionData} />
+            <Accordion list={accordionData} />
           </Balloon>
           <MenuTopic
             href={this.props.sharedMenu.topic.href}
