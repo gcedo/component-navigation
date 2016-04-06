@@ -242,7 +242,14 @@ export default class Navigation extends React.Component {
 
   render() {
     const { searching } = this.state;
+    const { userIsSubscriber } = this.props;
+    let { accordionData } = this.props;
     const svgUri = { uri: this.props.svgUri } || {};
+    if (userIsSubscriber) {
+      accordionData = accordionData.filter((accordionLink) => (
+        accordionLink.hideWhenSubscribed !== true
+      ));
+    }
 
     const menuAccordionTrigger = (
       <a href="/Sections" className="navigation__sections-link navigation--tappable-icon">
@@ -260,7 +267,7 @@ export default class Navigation extends React.Component {
             className="navigation__main-navigation-link navigation__mobile-accordion"
             trigger={menuAccordionTrigger}
           >
-            <Accordion list={this.props.accordionData} />
+            <Accordion list={accordionData} />
           </Balloon>
           <MenuTopic
             href={this.props.sharedMenu.topic.href}
@@ -278,18 +285,22 @@ export default class Navigation extends React.Component {
             title={this.props.sharedMenu.more.title}
           />
           <div className="navigation__primary-expander" />
-          <Button href={this.props.sharedMenu.subscribe.href}
-            className="navigation__main-navigation-link navigation__main-navigation-link-subscribe
-            navigation__main-navigation--desktop"
-            target="_blank"
-            i13nModel={{
-              action: 'click',
-              element: 'subscribe',
-            }}
-            unstyled
-          >
-            {this.props.sharedMenu.subscribe.title}
-          </Button>
+          {
+            userIsSubscriber ? null : (
+              <Button href={this.props.sharedMenu.subscribe.href}
+                className="navigation__main-navigation-link navigation__main-navigation-link-subscribe
+                navigation__main-navigation--desktop"
+                target="_blank"
+                i13nModel={{
+                  action: 'click',
+                  element: 'subscribe',
+                }}
+                unstyled
+              >
+                {this.props.sharedMenu.subscribe.title}
+              </Button>
+            )
+          }
           <div className="navigation__user-menu">
             {this.renderLoginLogout()}
           </div>

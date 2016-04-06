@@ -2,109 +2,120 @@ import 'babel-polyfill';
 import Navigation from '../src';
 import React from 'react';
 import chai from 'chai';
-import chaiReactElement from 'chai-react-element';
+import chaiEnzyme from 'chai-enzyme';
 import links from './links';
-chai.use(chaiReactElement).should();
-// Get data.
+import { mount } from 'enzyme';
 import navigationLinks from '@economist/component-sections-card/lib/context';
-/* eslint-disable id-match */
-// Force media links to use icon as background.
-navigationLinks.media.forEach((mediaLink) => {
-  mediaLink.icon = {
-    useBackground: true,
-    color: 'chicago',
-    icon: mediaLink.meta,
-  };
-  return mediaLink;
-});
-
-const sharedMenu = {
-  topic: {
-    title: 'Topics',
-    href: '/sections',
-  },
-  more: {
-    title: 'More',
-    href: '/digital',
-  },
-  subscribe: {
-    title: 'Subscribe',
-    href: 'https://subscriptions.economist.com/',
-  },
-};
-const accordionContext = [
-  {
-    title: sharedMenu.topic.title,
-    href: sharedMenu.topic.href,
-    children: context.sections,
-  },
-  {
-    title: 'Blogs',
-    href: '/blogs',
-    children: context.blogs,
-  },
-  ...context.media,
-  {
-    title: 'Print Edition',
-    href: '/printedition',
-  },
-  {
-    title: sharedMenu.more.title,
-    href: sharedMenu.more.href,
-  },
-  {
-    title: sharedMenu.subscribe.title,
-    href: sharedMenu.subscribe.href,
-    target: '_blank',
-    unstyled: false,
-    i13nModel: {
-      action: 'click',
-      element: 'subscribe',
-    },
-  },
-];
-const registered = [ links.subscribe, links.myeconomist, links.logout ];
-describe('A navigation', () => {
-
-  it('is compatible with React.Component', () => {
-    Navigation.should.be.a('function').and.respondTo('render');
+chai.use(chaiEnzyme()).should();
+describe('Navigation', () => {
+  let props = null;
+  let registered = null;
+  beforeEach(() => {
+    props = {
+      links: registered,
+      sectionsCardData: navigationLinks,
+      moreBalloonData: {},
+      accordionData: [
+        {
+          title: 'Topics',
+          href: '/sections',
+          children: context.sections,
+        },
+        {
+          title: 'Blogs',
+          href: '/blogs',
+          children: context.blogs,
+        },
+        {
+          title: 'Print Edition',
+          href: '/printedition',
+        },
+        {
+          title: 'More',
+          href: '/digital',
+        },
+        {
+          title: 'Subscribe',
+          href: 'https://subscriptions.economist.com/',
+          target: '_blank',
+          unstyled: false,
+          i13nModel: { // eslint-disable-line id-match
+            action: 'click',
+            element: 'subscribe',
+          },
+        },
+      ],
+      sharedMenu: {
+        topic: {
+          title: 'Topics',
+          href: '/sections',
+        },
+        more: {
+          title: 'More',
+          href: '/digital',
+        },
+        subscribe: {
+          title: 'Subscribe',
+          href: 'https://subscriptions.economist.com/',
+        },
+      },
+    };
+    registered = [ links.subscribe, links.myeconomist, links.logout ];
   });
 
   it('renders a React element', () => {
-    React.isValidElement(
-      <Navigation
-        className="navigation navigation--registered navigation--sticked"
-        links={registered}
-        sectionsCardData={context}
-        accordionData={accordionContext}
-        sharedMenu={sharedMenu}
-      />).should.equal(true);
+    React.isValidElement(<Navigation {...props} />).should.equal(true);
   });
 
-  describe('login/logout button', () => {
-
-    it('links to /user/login?destination={this.props.currentUrl}', () => {
-      const instance = new Navigation({
-        currentUrl: '/foo/bar',
-        sectionsCardData: context,
-        accordionData: accordionContext,
-        sharedMenu,
-      });
-      instance.renderLoginLogout()
-        .should.include.prop('href', '/user/login?destination=%2Ffoo%2Fbar');
+  describe('Rendering', () => {
+    let rendered = null;
+    let navigation = null;
+    it('renders a top level div.navigation', () => {
+      rendered = mount(<Navigation {...props} className="navigation" />);
+      navigation = rendered.find('.navigation');
+      navigation.should.have.tagName('div');
+      navigation.should.have.className('navigation');
     });
 
-    it('links to /logout?destination={this.props.currentUrl} when user is logged in', () => {
-      const instance = new Navigation({
-        currentUrl: '/foo/bar',
-        userLoggedIn: true,
-        sectionsCardData: context,
-        accordionData: accordionContext,
-        sharedMenu,
-      });
-      instance.renderLoginLogout()
-        .should.include.elementOfType('a')
-          .with.prop('href', '/logout?destination=%2Ffoo%2Fbar');
+    it('renders link to /user/login?destination={this.props.currentUrl} when `userLoggedIn` is not set', () => {
+      rendered = mount(<Navigation {...props} className="navigation" currentUrl="/foo/bar" />);
+      rendered.find('.navigation__user-menu-log-in-button')
+        .should.have.attr('href', '/user/login?destination=%2Ffoo%2Fbar');
+    });
+
+    it('renders link to /logout?destination={this.props.currentUrl} when `userLoggedIn` is set', () => {
+      rendered = mount(<Navigation {...props} userLoggedIn currentUrl="/foo/bar" />);
+      rendered.find('.navigation__user-menu-linklist-link--cta')
+        .should.have.attr('href', '/logout?destination=%2Ffoo%2Fbar');
+    });
+
+    it('renders subscribe button when `userIsSubscriber` is not set', () => {
+      rendered = mount(<Navigation {...props} />);
+      rendered.find('.navigation__main-navigation-link-subscribe').should.be.present();
+    });
+
+    it('does not render subscribe button when `userIsSubscriber` is set', () => {
+      rendered = mount(<Navigation {...props} userIsSubscriber />);
+      rendered.find('.navigation__main-navigation-link-subscribe').should.not.be.present();
+    });
+
+    it('renders links in mobile menu with `hideWhenSubscribed: true` when `userIsSubscriber` not set', () => {
+      rendered = mount(<Navigation {...props} />);
+      const mobileMenu = rendered.find('.navigation__primary-inner').find('.accordion');
+      mobileMenu.should.have.exactly(5).descendants('.list__item');
+      mobileMenu.childAt(4).find('.link-button')
+        .should.have.text('Subscribe');
+    });
+
+    it('does not render links in mobile menu with `hideWhenSubscribed: true` when `userIsSubscriber` is set', () => {
+      props.accordionData[4].hideWhenSubscribed = true;
+      rendered = mount(<Navigation {...props} userIsSubscriber />);
+      const mobileMenu = rendered.find('.navigation__primary-inner').find('.accordion');
+      mobileMenu.should.have.exactly(4).descendants('.list__item');
+      mobileMenu.childAt(0).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(1).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(2).find('.link-button').should.not.have.text('Subscribe');
+      mobileMenu.childAt(3).find('.link-button').should.not.have.text('Subscribe');
     });
 
   });

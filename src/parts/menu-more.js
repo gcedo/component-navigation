@@ -1,8 +1,8 @@
-import React, { PropTypes as T } from 'react';
 import Balloon from '@economist/component-balloon';
+import React from 'react';
 import SectionsCard from '@economist/component-sections-card';
 
-function MenuMore({ href, title, moreBalloonData }) {
+export default function MenuMore({ href, title, moreBalloonData }) {
   return (
     <Balloon
       dynamicPositioning={false}
@@ -25,10 +25,10 @@ function MenuMore({ href, title, moreBalloonData }) {
   );
 }
 
-MenuMore.propTypes = {
-  href: T.string.isRequired,
-  title: T.string.isRequired,
-  moreBalloonData: SectionsCard.propTypes.data,
-};
-
-export default MenuMore;
+if (process.env.NODE_ENV !== 'production') {
+  MenuMore.propTypes = {
+    href: React.PropTypes.string.isRequired,
+    title: React.PropTypes.string.isRequired,
+    moreBalloonData: SectionsCard.propTypes.data,
+  };
+}
