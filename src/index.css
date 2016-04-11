@@ -85,8 +85,10 @@
 }
 
 @media (--navigation-mobile-up) {
-  .navigation__sections-link:hover,
-  .navigation__link:hover {
+  .navigation__main-navigation-link:hover,
+  .navigation__user-menu-link:hover,
+  .navigation__search-open-button:hover,
+  .navigation__sections-link:hover {
     filter: grayscale(100%) brightness(5) brightness(80%);
   }
 
